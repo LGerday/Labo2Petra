@@ -29,7 +29,10 @@ namespace ClientLabo2.View
         }
         private void Connect(object sender, RoutedEventArgs e)
         {
-            _viewModel.ConnectToServer();
+            string ip = IpBox.Text;
+            string port = PortBox.Text;
+            int prt = Int32.Parse(port);
+            _viewModel.ConnectToServer(ip,prt);
         }
     }
 }

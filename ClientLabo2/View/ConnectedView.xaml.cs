@@ -26,7 +26,20 @@ namespace ClientLabo2.View
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
-            LabelMsg.DataContext = _viewModel.Msg;
+            CaptorList.DataContext = _viewModel.Captor;
+            ActuatorAction.DataContext = _viewModel.Actuator;
+        }
+
+        private void TurnOn(object sender, RoutedEventArgs e)
+        {
+            var rowItem = ((Button)sender).DataContext as String;
+            PopUpTime popup = new PopUpTime();
+            popup.ShowDialog();
+            if (popup.choice)
+            {
+                _viewModel.SendMessage(rowItem,popup.time);
+            }
+
         }
     }
 }
