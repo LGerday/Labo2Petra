@@ -26,7 +26,7 @@ namespace ClientLabo2
         public Socket sender { get; set; }
         public Thread threadCaptor { get; set; }
         public ObservableCollection<Captor> Captor { get; set; }
-        public ObservableCollection<String> Actuator { get; set; }
+        public ObservableCollection<Actuator> Actuator { get; set; }
 
 
 
@@ -45,14 +45,14 @@ namespace ClientLabo2
             Connected = new ConnectedView(this);
             ConnectionView = new ConnectionView(this);
             CurrentView = ConnectionView;
-            Actuator = new ObservableCollection<string>();
-            Actuator.Add("Convoyeur 1");
-            Actuator.Add("Convoyeur 2");
-            Actuator.Add("Ventouse");
-            Actuator.Add("Plongeur"); 
-            Actuator.Add("Arbre");
-            Actuator.Add("Grappin");
-            Actuator.Add("Chariot");
+            Actuator = new ObservableCollection<Actuator>();
+            Actuator.Add(new Actuator("Convoyeur 1",1));
+            Actuator.Add(new Actuator("Convoyeur 2",2));
+            Actuator.Add(new Actuator("Ventouse",3));
+            Actuator.Add(new Actuator("Plongeur",4)); 
+            Actuator.Add(new Actuator("Arbre",5));
+            Actuator.Add(new Actuator("Grappin",6));
+            Actuator.Add(new Actuator("Chariot",7));
 
             Captor = new ObservableCollection<Captor>();
             Captor.Add(new Captor("DE",0));
@@ -99,10 +99,10 @@ namespace ClientLabo2
             Debug.WriteLine(ip+port);*/
         }
 
-        public void SendMessage(string captor,int time)
+        public void SendMessage(int captor,int time)
         {
-            int nb = FindNbCaptor(captor);
-            if (nb != 0)
+            Debug.WriteLine("Test on passe dans le send\n");
+            if (captor != 0)
             {
                 string msg = captor.ToString() + "-" + time.ToString();
                 byte[] messageSent = Encoding.ASCII.GetBytes(msg);

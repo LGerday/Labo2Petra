@@ -61,12 +61,12 @@ char msgClient[50];
 char msgServeur[50];
 int ret;
 int captor;
-int time;
+int timeCaptor;
 
 void main()
 {
 
-	strcpy(hostname,"10.59.40.64");
+	strcpy(hostname,"192.168.182.134");
 	strcpy(msgServeur,"Salut c est le serveur\n");
 	printf("Ip : %s", hostname);
 
@@ -111,42 +111,44 @@ void main()
     u_act.act.PV = 1 ;
     printf ( "actuateurs : %x \n\r", u_act.byte );
 
-    fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
+    /*fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
     if ( fd_petra_out == -1 )
     {
         perror ( "MAIN : Erreur ouverture PETRA_OUT" );
         return 1;
     }
     else
-        printf ("MAIN: PETRA_OUT opened\n");
+        printf ("MAIN: PETRA_OUT opened\n");*/
 
 
     u_act.byte = 0x00;
-    write ( fd_petra_out , &u_act.byte ,1 );
+    pthread_create(&tid,NULL,threadCaptor,&hSocketService);
+    //write ( fd_petra_out , &u_act.byte ,1 );
     while(1)
     {
         if((ret = recv(hSocketService,msgClient,50,0)) == -1)
-    		printf("Error\n");  	
+    		printf("Error\n");
     	//msg = "2-5"
 	    char * token = strtok(msgClient,"-");
 	    captor = atoi(token);
 	    token = strtok(NULL,"-");
-	    time = atoi(token);
-	    printf("Activation capteur %d pour %d secondes\n",captor,time);
+	    timeCaptor = atoi(token);
+	    printf("Activation capteur %d pour %d secondes\n",captor,timeCaptor);
 	    switch(captor)
 	    {
 	    	case 1:{
-                u_act.act.C1 = 1;
+                /*u_act.act.C1 = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.C1 = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+                write ( fd_petra_out , &u_act.byte ,1 );*/
+                printf("Test\n");
 	    	}
 	    	break;
 	    	case 2:{
                 u_act.act.C2 = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.C2 = 0;
                 write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
@@ -154,7 +156,7 @@ void main()
 	    	case 3:{
                 u_act.act.PV = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.PV = 0;
                 write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
@@ -162,7 +164,7 @@ void main()
 	    	case 4:{
                 u_act.act.PA = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.PA = 0;
                 write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
@@ -170,7 +172,7 @@ void main()
 	    	case 5:{
                 u_act.act.AA = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.AA = 0;
                 write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
@@ -178,7 +180,7 @@ void main()
 	    	case 6:{
                 u_act.act.GA = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(time);
+                sleep(timeCaptor);
                 u_act.act.GA = 0;
                 write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
@@ -192,8 +194,6 @@ void main()
 	    	break;
 	    }
     }
-
-
 
 }
 void* threadCaptor(void *param)
@@ -222,7 +222,7 @@ void* threadCaptor(void *param)
 		send(hSocketService,msgServeur,50,0);
 		usleep(100000);
 	}
-
+}
 
 /*
         printf ( "Dispenser empty          = %d \r\n" , u_capt.capt.DE );

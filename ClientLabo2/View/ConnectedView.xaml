@@ -72,8 +72,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel>
-                        <TextBlock Text="{Binding Actuator}"/>
-                        <TextBlock Text="          Entry Price: " />
+                        <TextBlock Text="{Binding Name}"/>
                         <Button Style="{StaticResource ButtonStyleMouseOver}"
                                 Content="Refresh"
                                 Click="TurnOn"/>
