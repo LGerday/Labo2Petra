@@ -84,19 +84,7 @@ namespace ClientLabo2
             sender.Connect(localEndPoint);
             CurrentView = Connected;
             threadCaptor = new Thread(ThreadFunction);
-
-            /*byte[] messageSent = Encoding.ASCII.GetBytes("Test<EOF>");
-            sender.Send(messageSent);
-
-            byte[] messageReceived = new byte[1024];
-
-            
-            
-
-            sender.Receive(messageReceived);
-
-            string Msg = Encoding.ASCII.GetString(messageReceived);
-            Debug.WriteLine(ip+port);*/
+            threadCaptor.start();
         }
 
         public void SendMessage(int captor,int time)
@@ -131,20 +119,20 @@ namespace ClientLabo2
                 default: return 0;
             }
         }
-        public void ThreadFunction()
+public void ThreadFunction()
+{
+    byte[] messageReceived = new byte[1024];
+    while (true)
+    {
+        sender.Receive(messageReceived);
+        int i = 0;
+        String[] strlist = Encoding.ASCII.GetString(messageReceived).Split('-');
+        foreach (String s in strlist)
         {
-            byte[] messageReceived = new byte[1024];
-            while (true)
-            {
-                sender.Receive(messageReceived);
-                int i = 0;
-                String[] strlist = Encoding.ASCII.GetString(messageReceived).Split('-');
-                foreach (String s in strlist)
-                {
-                    Captor[i].State = int.Parse(s);
-                    i =+ 1;
-                }
-            }
+            Captor[i].State = int.Parse(s);
+            i =+ 1;
         }
+    }
+}
     }
 }
