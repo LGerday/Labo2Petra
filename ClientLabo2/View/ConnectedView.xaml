@@ -74,7 +74,7 @@
                     <WrapPanel>
                         <TextBlock Text="{Binding Name}"/>
                         <Button Style="{StaticResource ButtonStyleMouseOver}"
-                                Content="Refresh"
+                                Content="Activate"
                                 Click="TurnOn"/>
                     </WrapPanel>
                 </DataTemplate>
