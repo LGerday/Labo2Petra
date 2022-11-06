@@ -8,19 +8,19 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\lelep\\.nuget\\packages\\": {}
+    "C:\\Users\\lele2\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lelep\\Desktop\\Labo2Petra\\ClientLabo2\\ClientLabo2.csproj",
+      "projectUniqueName": "C:\\Users\\lele2\\Desktop\\Labo2Petra\\ClientLabo2\\ClientLabo2.csproj",
       "projectName": "ClientLabo2",
-      "projectPath": "C:\\Users\\lelep\\Desktop\\Labo2Petra\\ClientLabo2\\ClientLabo2.csproj",
-      "packagesPath": "C:\\Users\\lelep\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lelep\\Desktop\\Labo2Petra\\ClientLabo2\\obj\\",
+      "projectPath": "C:\\Users\\lele2\\Desktop\\Labo2Petra\\ClientLabo2\\ClientLabo2.csproj",
+      "packagesPath": "C:\\Users\\lele2\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lele2\\Desktop\\Labo2Petra\\ClientLabo2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\lelep\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lele2\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -63,7 +63,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

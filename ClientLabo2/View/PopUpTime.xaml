@@ -40,7 +40,7 @@
             <RowDefinition Height="1.2*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" 
-               Content="Enter % of position" 
+               Content="Enter time in secondes" 
                HorizontalContentAlignment="Center"
                VerticalAlignment="Center"
                Foreground="White"
