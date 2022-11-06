@@ -119,6 +119,13 @@ void main()
     }
     else
         printf ("MAIN: PETRA_OUT opened\n");
+    fd_petra_in = open( "/dev/capteursPETRA",O_RDONLY);
+	if (fd_petra_in == -1)
+	{
+		perror ("MAIN : Erreur ouverture PETRA_IN");
+	}
+	else
+		printf ("MAIN: PETRA_IN opened\n");
 
 
     u_act.byte = 0x00;
@@ -219,7 +226,7 @@ void* threadCaptor(void *param)
 		msgServeur[12] = u_capt.capt.AP + '0';
 		msgServeur[13] = '-';
 		send(hSocketService,msgServeur,50,0);
-		usleep(100000);
+		sleep(1);
 	}
 }
 
