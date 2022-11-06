@@ -111,19 +111,19 @@ void main()
     u_act.act.PV = 1 ;
     printf ( "actuateurs : %x \n\r", u_act.byte );
 
-    /*fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
+    fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
     if ( fd_petra_out == -1 )
     {
         perror ( "MAIN : Erreur ouverture PETRA_OUT" );
         return 1;
     }
     else
-        printf ("MAIN: PETRA_OUT opened\n");*/
+        printf ("MAIN: PETRA_OUT opened\n");
 
 
     u_act.byte = 0x00;
     pthread_create(&tid,NULL,threadCaptor,&hSocketService);
-    //write ( fd_petra_out , &u_act.byte ,1 );
+    write ( fd_petra_out , &u_act.byte ,1 );
     while(1)
     {
         if((ret = recv(hSocketService,msgClient,50,0)) == -1)
@@ -137,12 +137,11 @@ void main()
 	    switch(captor)
 	    {
 	    	case 1:{
-                /*u_act.act.C1 = 1;
+                u_act.act.C1 = 1;
                 write ( fd_petra_out , &u_act.byte ,1 );
                 sleep(timeCaptor);
                 u_act.act.C1 = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );*/
-                printf("Test\n");
+                write ( fd_petra_out , &u_act.byte ,1 );
 	    	}
 	    	break;
 	    	case 2:{
