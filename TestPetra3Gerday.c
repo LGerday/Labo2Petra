@@ -63,7 +63,7 @@ int ret;
 int captor;
 int timeCaptor;
 
-void main()
+int main()
 {
 
 	strcpy(hostname,"192.168.182.134");
@@ -129,7 +129,8 @@ void main()
 
 
     u_act.byte = 0x00;
-    pthread_create(&tid,NULL,threadCaptor,&hSocketService);
+    pthread_create(&tid,NULL,threadCaptor,NULL);
+    //pthread_create(&tid,NULL,threadCaptor,&hSocketService);
     write ( fd_petra_out , &u_act.byte ,1 );
     while(1)
     {
@@ -204,8 +205,8 @@ void main()
 }
 void* threadCaptor(void *param)
 {
-	int* hSocketService;
-	hSocketService=(int*)param;
+	//int* hSocketService;
+	//hSocketService=(int*)param;
 
 	while(1)
 	{
