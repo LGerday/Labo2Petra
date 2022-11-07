@@ -84,7 +84,7 @@ namespace ClientLabo2
             sender.Connect(localEndPoint);
             CurrentView = Connected;
             threadCaptor = new Thread(ThreadFunction);
-            threadCaptor.start();
+            threadCaptor.Start();
         }
 
         public void SendMessage(int captor,int time)
