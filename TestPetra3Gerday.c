@@ -129,8 +129,8 @@ int main()
 
 
     u_act.byte = 0x00;
+    printf("Serveur <: Creation thread capteur\n");
     pthread_create(&tid,NULL,threadCaptor,NULL);
-    //pthread_create(&tid,NULL,threadCaptor,&hSocketService);
     write ( fd_petra_out , &u_act.byte ,1 );
     while(1)
     {
@@ -205,8 +205,6 @@ int main()
 }
 void* threadCaptor(void *param)
 {
-	//int* hSocketService;
-	//hSocketService=(int*)param;
 
 	while(1)
 	{
@@ -225,18 +223,8 @@ void* threadCaptor(void *param)
 		msgServeur[10] = u_capt.capt.L2 + '0';
 		msgServeur[11] = '-';
 		msgServeur[12] = u_capt.capt.AP + '0';
-		msgServeur[13] = '-';
+		printf("Serveur <: Envoie etat capteur\n");
 		send(hSocketService,msgServeur,50,0);
 		sleep(1);
 	}
 }
-
-/*
-        printf ( "Dispenser empty          = %d \r\n" , u_capt.capt.DE );
-        printf ( "Carrier Stable           = %d \r\n" , u_capt.capt.CS );
-        printf ( "Plunger Position         = %d \r\n" , u_capt.capt.PP );
-        printf ( "Slot                     = %d \r\n" , u_capt.capt.S );
-        printf ( "L1                       = %d \r\n" , u_capt.capt.L1 );
-        printf ( "L2                       = %d \r\n" , u_capt.capt.L2 );
-        printf ( "Arm Position             = %d \r\n" , u_capt.capt.AP
-*/
