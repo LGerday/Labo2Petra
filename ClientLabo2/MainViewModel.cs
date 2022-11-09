@@ -17,6 +17,7 @@ namespace ClientLabo2
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        public int TypeRunningApp { get; set; }
         public ConnectedView Connected { get; set; }
         public ConnectionView ConnectionView { get; set; }
         private object _currentView;
@@ -62,6 +63,7 @@ namespace ClientLabo2
             Captor.Add(new Captor("L1", 0));
             Captor.Add(new Captor("L2", 0)); 
             Captor.Add(new Captor("AP", 0));
+            TypeRunningApp = 0;
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -73,9 +75,15 @@ namespace ClientLabo2
         public void ConnectToServer(string ip,int port)
         {
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            ipAddr = IPAddress.Parse(ip);
-            //192.168.182.134
-            //10.59.40.64
+            if (TypeRunningApp == 1)
+            {
+                ipAddr = IPAddress.Parse("10.59.40.64");
+            }
+            else if (TypeRunningApp == 2)
+            {
+                ipAddr = IPAddress.Parse("192.168.139.134");
+            }
+            
             localEndPoint = new IPEndPoint(ipAddr, port);
 
             sender = new Socket(ipAddr.AddressFamily,
@@ -89,7 +97,6 @@ namespace ClientLabo2
 
         public void SendMessage(int captor,int time)
         {
-            Debug.WriteLine("Test on passe dans le send\n");
             if (captor != 0)
             {
                 string msg = captor.ToString() + "-" + time.ToString();
@@ -98,41 +105,22 @@ namespace ClientLabo2
             }
         }
 
-        public int FindNbCaptor(string captor)
+        public void ThreadFunction()
         {
-            switch (captor)
+            byte[] messageReceived = new byte[1024];
+            while (true)
             {
-                case "Convoyeur 1":
-                    return 1;
-                case "Convoyeur 2":
-                    return 2;
-                case "Ventouse":
-                    return 3;
-                case "Plongeur":
-                    return 4;
-                case "Arbre":
-                    return 5;
-                case "Grappin":
-                    return 6;
-                case "Chariot":
-                    return 7;
-                default: return 0;
+                Thread.Sleep(1000);
+                sender.Receive(messageReceived);
+                int i = 0;
+                string strlist = Encoding.ASCII.GetString(messageReceived);
+                Debug.WriteLine("Client <: Reception message :"+ strlist);
+                foreach (Captor c in Captor)
+                {
+                    c.State = strlist[i] - 48;
+                    i += 1;
+                }
             }
         }
-public void ThreadFunction()
-{
-    byte[] messageReceived = new byte[1024];
-    while (true)
-    {
-        sender.Receive(messageReceived);
-        int i = 0;
-        String[] strlist = Encoding.ASCII.GetString(messageReceived).Split('-');
-        foreach (String s in strlist)
-        {
-            Captor[i].State = int.Parse(s);
-            i =+ 1;
-        }
-    }
-}
     }
 }

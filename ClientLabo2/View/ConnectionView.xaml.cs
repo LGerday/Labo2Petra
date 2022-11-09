@@ -34,5 +34,15 @@ namespace ClientLabo2.View
             int prt = Int32.Parse(port);
             _viewModel.ConnectToServer(ip,prt);
         }
+
+        private void Localhost_Button(object sender, RoutedEventArgs e)
+        {
+            _viewModel.TypeRunningApp = 2;
+        }
+
+        private void PETRA_Button(object sender, RoutedEventArgs e)
+        {
+            _viewModel.TypeRunningApp = 1;
+        }
     }
 }

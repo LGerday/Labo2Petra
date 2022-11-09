@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "SHV4JQVOzgo9GElDV11iXKnRaICnZOxTqCQBhBwWczfq1U3kisxhyG+rLFLgUkndYzpCKAAgcU8YmQ1lJtFLRg==",
+  "dgSpecHash": "FBEi4+5/ro9cqNR1JG6RVeYpiZKlmuxZnR8niNizlCSWCeF9x2vLURYO4DPnihpXznYBXQrKFgMzOWezk4k0IA==",
   "success": true,
   "projectFilePath": "C:\\Users\\lele2\\Desktop\\Labo2Petra\\ClientLabo2\\ClientLabo2.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\lele2\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\lele2\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
+    "C:\\Users\\lele2\\.nuget\\packages\\wpf-ui\\2.0.3\\wpf-ui.2.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

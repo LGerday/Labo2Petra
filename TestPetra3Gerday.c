@@ -16,6 +16,7 @@
 #include <time.h>
 #include <termios.h>
 #include <string.h>
+#include <time.h>
 
 int hSocketEcoute;
 int hSocketService;
@@ -62,11 +63,27 @@ char msgServeur[50];
 int ret;
 int captor;
 int timeCaptor;
+int serverType;
 
 int main()
 {
 
-	strcpy(hostname,"192.168.182.134");
+
+	printf("Enter type of server : \n");
+	printf("1 for localhost\n");
+	printf("2 for PETRA\n");
+	scanf("%d",&serverType);
+	fflush(stdin);
+
+	if(serverType == 1)
+	{
+		strcpy(hostname,"192.168.182.134");
+	}
+	else
+	{
+	strcpy(hostname,"10.59.40.64");
+	}
+			
 	strcpy(msgServeur,"Salut c est le serveur\n");
 	printf("Ip : %s", hostname);
 
@@ -106,32 +123,35 @@ int main()
 
     printf("Serveur cree avec succes\n");
     u_act.byte = 0x00 ;
-    printf ( "actuateurs : %x \n\r", u_act.byte );
-
     u_act.act.PV = 1 ;
-    printf ( "actuateurs : %x \n\r", u_act.byte );
 
-    fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
-    if ( fd_petra_out == -1 )
+
+    if(serverType == 2)
     {
-        perror ( "MAIN : Erreur ouverture PETRA_OUT" );
-        return 1;
+	    fd_petra_out = open ( "/dev/actuateursPETRA", O_WRONLY );
+	    if ( fd_petra_out == -1 )
+	    {
+	        perror ( "MAIN : Erreur ouverture PETRA_OUT" );
+	        return 1;
+	    }
+	    else
+	        printf ("MAIN: PETRA_OUT opened\n");
+	    fd_petra_in = open( "/dev/capteursPETRA",O_RDONLY);
+		if (fd_petra_in == -1)
+		{
+			perror ("MAIN : Erreur ouverture PETRA_IN");
+		}
+		else
+			printf ("MAIN: PETRA_IN opened\n");    	
     }
-    else
-        printf ("MAIN: PETRA_OUT opened\n");
-    fd_petra_in = open( "/dev/capteursPETRA",O_RDONLY);
-	if (fd_petra_in == -1)
-	{
-		perror ("MAIN : Erreur ouverture PETRA_IN");
-	}
-	else
-		printf ("MAIN: PETRA_IN opened\n");
+
 
 
     u_act.byte = 0x00;
     printf("Serveur <: Creation thread capteur\n");
     pthread_create(&tid,NULL,threadCaptor,NULL);
-    write ( fd_petra_out , &u_act.byte ,1 );
+    if(serverType == 2)
+    	write ( fd_petra_out , &u_act.byte ,1 );
     while(1)
     {
         if((ret = recv(hSocketService,msgClient,50,0)) == -1)
@@ -141,62 +161,118 @@ int main()
 	    captor = atoi(token);
 	    token = strtok(NULL,"-");
 	    timeCaptor = atoi(token);
-	    printf("Activation capteur %d pour %d secondes\n",captor,timeCaptor);
+	    printf("Serveur <: Activation Actuateur %d pour %d secondes\n",captor,timeCaptor);
 	    switch(captor)
 	    {
 	    	case 1:{
-                u_act.act.C1 = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.C1 = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.C1 = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.C1 = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur C1 pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 2:{
-                u_act.act.C2 = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.C2 = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.C2 = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.C2 = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );	    			
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur C2 pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 3:{
-                u_act.act.PV = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.PV = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.PV = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.PV = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur PV pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 4:{
-                u_act.act.PA = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.PA = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.PA = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.PA = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur PA pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 5:{
-                u_act.act.AA = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.AA = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.AA = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.AA = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur AA pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 6:{
-                u_act.act.GA = 1;
-                write ( fd_petra_out , &u_act.byte ,1 );
-                sleep(timeCaptor);
-                u_act.act.GA = 0;
-                write ( fd_petra_out , &u_act.byte ,1 );
+	    		if(serverType == 2)
+	    		{
+	                u_act.act.GA = 1;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	                sleep(timeCaptor);
+	                u_act.act.GA = 0;
+	                write ( fd_petra_out , &u_act.byte ,1 );
+	    		}
+	    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur GA pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    	case 7:{
-                if (u_act.act.CP < 3)
-                    u_act.act.CP++;
-                else
-                    u_act.act.CP = 0;
+	    		if(serverType == 2)
+	    		{
+	                if (u_act.act.CP < 3)
+	                    u_act.act.CP++;
+	                else
+	                    u_act.act.CP = 0;
+		    		}
+		    		else
+	    		{
+	    			printf("Serveur <: Simulation activation capteur CP pendant %d secondes \n",timeCaptor);
+	    		}
+
 	    	}
 	    	break;
 	    }
@@ -206,25 +282,51 @@ int main()
 void* threadCaptor(void *param)
 {
 
-	while(1)
+	if(serverType == 2)
 	{
-		read ( fd_petra_in , &u_capt.byte , 1 );
+		while(1)
+		{
+			read ( fd_petra_in , &u_capt.byte , 1 );
 
-		msgServeur[0] = u_capt.capt.DE + '0';
-		msgServeur[1] = '-';
-		msgServeur[2] = u_capt.capt.CS + '0';
-		msgServeur[3] = '-';
-		msgServeur[4] = u_capt.capt.PP + '0';
-		msgServeur[5] = '-';
-		msgServeur[6] = u_capt.capt.S + '0';
-		msgServeur[7] = '-';
-		msgServeur[8] = u_capt.capt.L1 + '0';
-		msgServeur[9] = '-';
-		msgServeur[10] = u_capt.capt.L2 + '0';
-		msgServeur[11] = '-';
-		msgServeur[12] = u_capt.capt.AP + '0';
-		printf("Serveur <: Envoie etat capteur\n");
-		send(hSocketService,msgServeur,50,0);
-		sleep(1);
+			msgServeur[0] = u_capt.capt.DE + '0';
+			msgServeur[1] = u_capt.capt.CS + '0';
+			msgServeur[2] = u_capt.capt.PP + '0';
+			msgServeur[3] = u_capt.capt.S + '0';
+			msgServeur[4] = u_capt.capt.L1 + '0';
+			msgServeur[5] = u_capt.capt.L2 + '0';
+			msgServeur[6] = u_capt.capt.AP + '0';
+			printf("Serveur <: Envoie etat capteur\n");
+			send(hSocketService,msgServeur,50,0);
+			sleep(1);
+		}		
+	}
+	else
+	{
+		srand(time(NULL));
+		unsigned tab[5][7];
+		int cpt = 0;
+		for(int i = 0; i < 5; i++)
+		{
+			for(int j = 0; j < 7; j++)
+			{
+				tab[i][j] = rand()%2+1;
+			}
+		}
+		while(1)
+		{
+			if(cpt > 4)
+				cpt = 0;
+			msgServeur[0] = tab[cpt][0] + '0';
+			msgServeur[1] = tab[cpt][1] + '0';
+			msgServeur[2] = tab[cpt][2] + '0';
+			msgServeur[3] = tab[cpt][3] + '0';
+			msgServeur[4] = tab[cpt][4] + '0';
+			msgServeur[5] = tab[cpt][5] + '0';
+			msgServeur[6] = tab[cpt][6] + '0';
+			printf("Serveur <: Envoie etat capteur %s\n",msgServeur);
+			send(hSocketService,msgServeur,50,0);
+			cpt++;
+			sleep(1);
+		}
 	}
 }

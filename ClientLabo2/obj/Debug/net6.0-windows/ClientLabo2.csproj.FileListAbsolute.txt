@@ -78,3 +78,8 @@ C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLab
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ref\ClientLabo2.dll
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLabo2.pdb
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLabo2.genruntimeconfig.cache
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\bin\Debug\net6.0-windows\Wpf.Ui.dll
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopUpTime.g.cs
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\App.baml
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopUpTime.baml
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLabo2.csproj.CopyComplete
