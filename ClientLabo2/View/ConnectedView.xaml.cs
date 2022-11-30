@@ -44,5 +44,11 @@ namespace ClientLabo2.View
             }
 
         }
+
+        private void TextAnalyzer(object sender, RoutedEventArgs e)
+        {
+            _viewModel.CurrentView = _viewModel.AnalyzerTextView;
+
+        }
     }
 }

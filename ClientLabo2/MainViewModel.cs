@@ -20,6 +20,7 @@ namespace ClientLabo2
         public int TypeRunningApp { get; set; }
         public ConnectedView Connected { get; set; }
         public ConnectionView ConnectionView { get; set; }
+        public AnalyzerTextView AnalyzerTextView { get; set; }
         private object _currentView;
         public IPHostEntry ipHost { get; set; }
         public IPAddress ipAddr { get; set; }
@@ -45,6 +46,7 @@ namespace ClientLabo2
         {
             Connected = new ConnectedView(this);
             ConnectionView = new ConnectionView(this);
+            AnalyzerTextView = new AnalyzerTextView(this);
             CurrentView = ConnectionView;
             Actuator = new ObservableCollection<Actuator>();
             Actuator.Add(new Actuator("Convoyeur 1",1));
@@ -105,6 +107,94 @@ namespace ClientLabo2
             }
         }
 
+        public void TextAnalyzer(string text)
+        {
+            ///Text de base
+            /// Commande : Activer,Désactiver,Activer pendant X secondes
+            /// Commande + Actuateur
+            int i = 0;
+            string[] textSplit = text.Split(' ');
+            string toSend = "";
+
+
+            switch (textSplit[0])
+            { 
+                case "activer":
+                { 
+                    // Activer capteur
+                    toSend = "1-";
+                    i++;
+                    if (textSplit[i] == "pendant")
+                    {
+                        i++;
+
+                        toSend = toSend + textSplit[i]+'-';
+                    }
+
+                    int nb = DetectActuator(textSplit[i]);
+                    toSend = toSend + nb.ToString();
+
+                    Debug.WriteLine(toSend);
+
+
+                } break;
+
+                case "desactiver": 
+                {
+
+                } break;
+
+
+                }
+            }
+
+        public int DetectActuator(string actuator)
+        {
+            switch (actuator)
+            {
+                case "convoyeur1":
+                {
+                    return 1;
+                }
+                    break;
+                case "convoyeur2":
+                {
+                    return 2;
+                }
+                    break;
+                case "ventouse":
+                {
+                    return 3;
+                }
+                    break;
+                case "plongeur":
+                {
+                    return 4;
+                }
+                    break;
+                case "arbre":
+                {
+                    return 5;
+                }
+                    break;
+                case "grappin":
+                {
+                    return 6;
+                }
+                    break;
+                case "chariot":
+                {
+                    return 7;
+                }
+                    break;
+                default:
+                {
+                    return 0;
+                }
+                    break;
+
+            }
+        }
         public void ThreadFunction()
         {
             byte[] messageReceived = new byte[1024];

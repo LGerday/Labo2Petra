@@ -87,6 +87,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
+        <Button Grid.Column="1"
+                Click="TextAnalyzer"
+                Content="Analyser du texte"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

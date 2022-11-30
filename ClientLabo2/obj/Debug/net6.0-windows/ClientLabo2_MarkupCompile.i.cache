@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\
+C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\
 ClientLabo2
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\App.xaml
-4-1644643252
+C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\App.xaml
+5-684900898
 
-111359630265
-1961841673578
-MainWindow.xaml;View\ConnectedView.xaml;View\ConnectionView.xaml;View\PopUpTime.xaml;
+12-2082902893
+196987105086
+MainWindow.xaml;View\AnalyzerTextView.xaml;View\ConnectedView.xaml;View\ConnectionView.xaml;View\PopUpTime.xaml;
 
 False
 
