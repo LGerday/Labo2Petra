@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\App.xaml
-5-926810355
+6-1590826852
 
-11-2141888937
+121650144947
 1961841673578
-MainWindow.xaml;View\ConnectedView.xaml;View\ConnectionView.xaml;View\PopPupPosition.xaml;View\PopUpTime.xaml;
+MainWindow.xaml;View\ConnectedView.xaml;View\ConnectionView.xaml;View\PopPupPosition.xaml;View\PopUpTime.xaml;View\TestCaptor.xaml;
 
 False
 

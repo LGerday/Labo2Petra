@@ -19,6 +19,9 @@
     <Compile Update="View\PopUpTime.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\TestCaptor.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\PopUpTime.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\TestCaptor.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

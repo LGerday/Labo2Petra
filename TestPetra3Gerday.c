@@ -55,12 +55,12 @@ union
     unsigned char byte ;
     } u_act ;
 void* threadCaptor(void *);
+void ExecuteCommand(char msg[50]);
 int port = 6670;
 char hostname[30];
 int fd_petra_in,fd_petra_out;
-char msgClient[50];
+char msgClient[100];
 char msgServeur[50];
-char bigMsg[400];
 char ReceptMsg[7][50];
 int ret;
 int captor;
@@ -73,7 +73,7 @@ int main()
 
 	printf("Enter type of server : \n");
 	printf("1 for localhost\n");
-	printf("2 for PETRA\n");
+	printf("2 for PETRAbis\n");
 	scanf("%d",&serverType);
 	fflush(stdin);
 
@@ -153,25 +153,50 @@ int main()
     pthread_create(&tid,NULL,threadCaptor,NULL);
     if(serverType == 2)
     	write ( fd_petra_out , &u_act.byte ,1 );
+    int cpt;
+    int choice;
 	while(1)
 	    {
-	    	int cpt = 0;
-
-	    	//msg type X-X-X
-	        if((ret = recv(hSocketService,bigMsg,400,0)) == -1)
+			for(ret = 0;ret < 7;ret++)
+			{
+				memset(ReceptMsg[ret], '\0', sizeof(ReceptMsg[ret]));
+			}
+			memset(msgClient, '\0', sizeof(msgClient));
+	    	cpt = 0;
+	    	printf("Serveur <: Waiting for a message\n");
+	        if((ret = recv(hSocketService,msgClient,100,0)) == -1)
 	    		printf("Error\n");
-	    	ReceptMsg[0] = strtok(bigMsg,";");
-
-	    	while(token = strtok(NULL,";"))
+	        printf("Msg Receive : %s\n",msgClient);
+	    	token = strtok(msgClient,"!");
+	    	choice = atoi(token);
+	    	token = strtok(NULL,";");
+		    strcpy(ReceptMsg[0],token);
+	    	if(choice == 1)
 	    	{
-	    		cpt++;
-	    		strcpy(ReceptMsg[cpt],token);
+	    		ExecuteCommand(ReceptMsg[0]);
 	    	}
-		    for(ret = 0;ret < cpt+1;ret++)
-		    {
-		    	printf("Msg recu : %s",ReceptMsg[ret]);
-		    }
-		    /*action = atoi(token);
+	    	else
+	    	{
+		    	while(token = strtok(NULL,";"))
+		    	{
+		    		cpt++;
+		    		strcpy(ReceptMsg[cpt],token);
+		    	}
+			    for(ret = 0;ret < cpt+1;ret++)
+			    {
+
+			    	ExecuteCommand(ReceptMsg[ret]);
+			    }
+	    	}
+
+
+	    }
+
+}
+void ExecuteCommand(char msg[50])
+{
+			char * token = strtok(msg,"-");
+			action = atoi(token);
 		    token = strtok(NULL,"-");
 		    captor = atoi(token);
 		    token = strtok(NULL,"-");
@@ -198,7 +223,7 @@ int main()
 					    		}
 					    		else
 					    		{
-					    			//usleep(timeCaptor*1000);
+					    			usleep(timeCaptor*1000);
 					    			printf("Serveur <: Simulation activation capteur C1 pendant %d secondes \n",timeCaptor);
 					    		}
 
@@ -215,7 +240,7 @@ int main()
 					    		}
 					    		else
 					    		{
-					    			//usleep(timeCaptor*1000);
+					    			usleep(timeCaptor*1000);
 					    			printf("Serveur <: Simulation activation capteur C2 pendant %d secondes \n",timeCaptor);
 					    		}
 		    				}break;
@@ -354,12 +379,10 @@ int main()
 		    	case 4:
 		    	{
 		    		// Wait
-		    		//usleep(timeCaptor*1000);
+		    		usleep(timeCaptor*1000);
 		    		printf("Serveur <: Simulation attente de %d secondes \n",timeCaptor);
 		    	}break;
-		    }*/
-	    }
-
+		    }
 }
 void* threadCaptor(void *param)
 {
@@ -392,7 +415,7 @@ void* threadCaptor(void *param)
 		{
 			for(j = 0; j < 7; j++)
 			{
-				tab[i][j] = rand()%2+1;
+				tab[i][j] = rand()%2;
 			}
 		}
 		while(1)
@@ -406,7 +429,7 @@ void* threadCaptor(void *param)
 			msgServeur[4] = tab[cpt][4] + '0';
 			msgServeur[5] = tab[cpt][5] + '0';
 			msgServeur[6] = tab[cpt][6] + '0';
-			//printf("Serveur <: Envoie etat capteur %s\n",msgServeur);
+			printf("Serveur <: Envoie etat capteur %s\n",msgServeur);
 			send(hSocketService,msgServeur,50,0);
 			cpt++;
 			sleep(1);

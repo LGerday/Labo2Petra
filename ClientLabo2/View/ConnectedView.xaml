@@ -112,6 +112,48 @@
                 HorizontalAlignment="Center"
                 FontSize="20" />
         </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <WrapPanel>
+                <Label
+                    Content="Faire tout le circuit"
+                    FontSize="20"
+                    Foreground="Black" />
+                <ui:Button Click="AllCircuitExecution" Content="Execute" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label
+                    Content="Activer les deux convoyeur"
+                    FontSize="20"
+                    Foreground="Black" />
+                <ui:Button Click="test2" Content="Execute" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label
+                    Content="Convoyeur 1 et detecter piece"
+                    FontSize="20"
+                    Foreground="Black" />
+                <ui:Button Click="test3" Content="Execute" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label
+                    Content="Convoyeur 2 et detecter piece"
+                    FontSize="20"
+                    Foreground="Black" />
+                <ui:Button Click="test4" Content="Execute" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label
+                    Content="Chariot au convoyeur 1"
+                    FontSize="20"
+                    Foreground="Black" />
+                <ui:Button Click="test5" Content="Execute" />
+            </WrapPanel>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

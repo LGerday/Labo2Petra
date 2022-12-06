@@ -33,5 +33,10 @@ namespace ClientLabo2.Classe
         {
             return "Action :" + Action + "Actuator :" + Actuator + "Time :" + Time + "Position : " + Position;
         }
+
+        public string MsgForSendInGroup()
+        {
+            return Action.ToString() + "-" + Actuator.ToString() + "-" + Time.ToString() + "-" + Position.ToString() + ";";
+        }
     }
 }

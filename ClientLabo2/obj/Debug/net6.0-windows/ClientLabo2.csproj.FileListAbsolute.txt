@@ -90,3 +90,5 @@ C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\Anal
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\AnalyzerTextView.baml
 C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopPupPosition.g.cs
 C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopPupPosition.baml
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\TestCaptor.g.cs
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\TestCaptor.baml

@@ -102,14 +102,31 @@ namespace ClientLabo2
 
         public void SendMessage(int action,int captor,int time,int position)
         {
-            string msg =  action.ToString() + "-"+ captor.ToString() + "-" + time.ToString() + "-" + position.ToString();
-            Debug.WriteLine("Test sendMsg : " + msg);
+            string msg = "1!"+action.ToString() + "-" + captor.ToString() + "-" + time.ToString() + "-" + position.ToString()+";";
+            Debug.WriteLine("Client <: Send single message : " + msg);
             byte[] messageSent = Encoding.ASCII.GetBytes(msg);
             sender.Send(messageSent);
         }
 
+        public void SendMessageGroup(string msg,int type)
+        {
+            string newMsg;
+            if (type == 1)
+            {
+                newMsg = "1!" + msg;
+            }
+            else
+            {
+                newMsg = "2!" + msg;
+            }
+            Debug.WriteLine("Client <: Send group message : "+newMsg);
+            byte[] messageSent = Encoding.ASCII.GetBytes(newMsg);
+            sender.Send(messageSent);
+        }
+
         /// <summary>
-        /// msg type : 1-5-8-0
+        /// msg type : x!1-5-8-0:
+        /// x is a parameter for the server : 1 one message, 2 multiple message
         /// if there is a 0 in the line, the parameter is not use : ex : 4-8-0 -> no actuator, 2-0-5 -> no time
         /// First symbol : 1 activer (avec temps), 2 activer sans temps, 3 désactiver,4 attendre avec temps
         /// Second symbol : Time (if 0 no time)
@@ -119,6 +136,7 @@ namespace ClientLabo2
         {
             Connected.SyntaxeNotif.Text = "";
             MsgToSend.ToZero();
+            string msg = "";
             int cpt = 0;
             string[] textSplit = syntaxetmp.Split(';');
 
@@ -134,12 +152,24 @@ namespace ClientLabo2
                     {
                         Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Green);
                         Connected.SyntaxeNotif.Text += "The " + cpt + " message ok   ";
-                        SendMessage(MsgToSend.Action, MsgToSend.Actuator, MsgToSend.Time, MsgToSend.Position);
+                        msg += MsgToSend.MsgForSendInGroup();
                         Debug.WriteLine("Client <: Msg sent via syntaxeCompiler to server with : " + MsgToSend.ToString());
+                    }
+                    else
+                    {
+                        MsgToSend.ToZero();
+                        return;
                     }
                     MsgToSend.ToZero();
                 }
             }
+
+            if (cpt == 1)
+            {
+                SendMessageGroup(msg,1);
+            }
+            else
+                SendMessageGroup(msg,2);
         }
         public void FirstAnalyzer(string synt)
         {
@@ -158,7 +188,7 @@ namespace ClientLabo2
                     {
                         //activer sans temps
                         MsgToSend.Action = 2;
-                        if (syntaxe.Length == 3)
+                        if (syntaxe.Length == 4)
                         {
                             CaptorAnalyzer(syntaxe[1],syntaxe[3]);
                         }
@@ -175,7 +205,6 @@ namespace ClientLabo2
                     break;
                 case "attendre":
                 {
-                    Debug.WriteLine("On passe attendre");
                     MsgToSend.Action = 4;
                     TimeAnalyzer(syntaxe, 1);
                     
@@ -186,7 +215,7 @@ namespace ClientLabo2
                         // error
                         Debug.WriteLine("Client <: Error first word");
                         Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
-                        Connected.SyntaxeNotif.Text = "Erreur in first word" + syntaxe[0];
+                        Connected.SyntaxeNotif.Text = "Erreur in first word : " + syntaxe[0];
                         MsgToSend.Action = -1;
                     }
                     break;
@@ -196,7 +225,6 @@ namespace ClientLabo2
 
         public void TimeAnalyzer(string[] synt,int type)
         {
-            Debug.WriteLine("time analyzer");
             if (int.TryParse(synt[type], out _))
             {
                 MsgToSend.Time = int.Parse(synt[type]);
@@ -209,7 +237,7 @@ namespace ClientLabo2
             {
                 Debug.WriteLine("Client <: Error number");
                 Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
-                Connected.SyntaxeNotif.Text = "Erreur in number" + synt[2];
+                Connected.SyntaxeNotif.Text = "Erreur in number : " + synt[type];
                 MsgToSend.Action = -1;
             }
             
@@ -259,60 +287,13 @@ namespace ClientLabo2
                 {
                     Debug.WriteLine("Client <: Error actuator");
                         Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
-                    Connected.SyntaxeNotif.Text = "Erreur in actuator name" + syntaxe;
+                    Connected.SyntaxeNotif.Text = "Erreur in actuator name : " + syntaxe;
                     MsgToSend.Action = -1;
                 } break;
 
             }
         }
 
-        public int DetectActuator(string actuator)
-        {
-            switch (actuator)
-            {
-                case "convoyeur1":
-                {
-                    return 1;
-                }
-                    break;
-                case "convoyeur2":
-                {
-                    return 2;
-                }
-                    break;
-                case "ventouse":
-                {
-                    return 3;
-                }
-                    break;
-                case "plongeur":
-                {
-                    return 4;
-                }
-                    break;
-                case "arbre":
-                {
-                    return 5;
-                }
-                    break;
-                case "grappin":
-                {
-                    return 6;
-                }
-                    break;
-                case "chariot":
-                {
-                    return 7;
-                }
-                    break;
-                default:
-                {
-                    return 0;
-                }
-                    break;
-
-            }
-        }
         public void ThreadFunction()
         {
             byte[] messageReceived = new byte[1024];
@@ -322,7 +303,7 @@ namespace ClientLabo2
                 sender.Receive(messageReceived);
                 int i = 0;
                 string strlist = Encoding.ASCII.GetString(messageReceived);
-                //Debug.WriteLine("Client <: Reception message :"+ strlist);
+                Debug.WriteLine("Client <: Reception message :"+ strlist);
                 foreach (Captor c in Captor)
                 {
                     c.State = strlist[i] - 48;

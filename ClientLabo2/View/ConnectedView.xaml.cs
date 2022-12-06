@@ -58,7 +58,7 @@ namespace ClientLabo2.View
                     if (saveAction[temp] == 0)
                     {
                         // activer
-                        _viewModel.SendMessage(1,rowItem.Captor,0,0);
+                        _viewModel.SendMessage(2,rowItem.Captor,0,0);
                         saveAction[temp] = 1;
 
                     }
@@ -103,6 +103,37 @@ namespace ClientLabo2.View
                 SyntaxeNotif.Text = "No text to analyze";
             }
 
+        }
+
+        private void AllCircuitExecution(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Serveur <: Execution de tout le circuit \n");
+            _viewModel.SendMessageGroup("2-4-0-0;4-0-2-0;2-3-0-0;3-4-0-0;1-1-7-0;2-5-0-0;", 2);
+            _viewModel.SendMessageGroup("4-0-3-0;3-3-0-0;4-0-5-0;1-2-7-0;3-6-0-0;", 2);
+        }
+        private void test2(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Serveur <: execution des deux convoyeur \n ");
+            _viewModel.SendMessageGroup("1-1-5-0;1-2-5-0;", 2);
+        }
+        private void test3(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Serveur <: Execution convoyeur 1 et detection piece\n");
+            _viewModel.SendMessageGroup("1-1-7-0;", 2);
+            TestCaptor test = new TestCaptor(_viewModel.Captor[4]);
+            test.Show();
+        }
+        private void test4(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Serveur <: Execution convoyeur 2 et detection piece \n");
+            _viewModel.SendMessageGroup("1-2-7-0;", 2);
+            TestCaptor test = new TestCaptor(_viewModel.Captor[5]);
+            test.Show();
+        }
+        private void test5(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Serveur <: Execution chariot au convoyeur 1\n");
+            _viewModel.SendMessageGroup("2-4-0-0;4-0-2-0;2-3-0-0;3-4-0-0;1-1-7-0;", 2);
         }
     }
 }
