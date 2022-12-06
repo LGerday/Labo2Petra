@@ -5,39 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClientLabo2.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="PopUpTime"
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <Window.Resources>
-        <Style x:Key="ButtonStyleMouseOver" TargetType="Button">
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Background" Value="#13131C" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="Black"
-                            BorderThickness="0">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5,5,5,5" />
-                </Style>
-            </Style.Resources>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="Red" />
-                    <Setter Property="Background" Value="#1A1F2D" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Grid Background="#1A1F2D">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -51,7 +23,7 @@
             Content="Enter time in secondes"
             FontSize="25"
             Foreground="White" />
-        <TextBox
+        <ui:TextBox
             x:Name="TextBoxTime"
             Grid.Row="1"
             Margin="75,50"
@@ -60,23 +32,25 @@
             Background="#202952"
             BorderThickness="0"
             FontSize="20"
-            Foreground="White"
+            Foreground="Black"
             Text="" />
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button
+            <ui:Button
                 Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Click="DoChange"
-                Content="OK"
-                Style="{StaticResource ButtonStyleMouseOver}" />
-            <Button
+                Content="   OK   " />
+            <ui:Button
                 Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Click="StopChange"
-                Content="Cancel"
-                Style="{StaticResource ButtonStyleMouseOver}" />
+                Content="   Cancel   " />
         </Grid>
 
 

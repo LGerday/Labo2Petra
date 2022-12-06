@@ -7,13 +7,13 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="View\AnalyzerTextView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\ConnectedView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ConnectionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\PopPupPosition.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\PopUpTime.xaml.cs">
@@ -24,13 +24,13 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\AnalyzerTextView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="View\ConnectedView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\ConnectionView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\PopPupPosition.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\PopUpTime.xaml">

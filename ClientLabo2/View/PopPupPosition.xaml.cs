@@ -10,29 +10,31 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ClientLabo2.View
 {
     /// <summary>
-    /// Logique d'interaction pour AnalyzerTextView.xaml
+    /// Logique d'interaction pour PopPupPosition.xaml
     /// </summary>
-    public partial class AnalyzerTextView : UserControl
+    public partial class PopPupPosition : Window
     {
-        private MainViewModel _viewModel;
-        public AnalyzerTextView(MainViewModel viewModel)
+        public int Position { get; set; }
+        public PopPupPosition()
         {
             InitializeComponent();
-            _viewModel = viewModel;
+            Position = -1;
         }
 
-        private void TryAnalyzer(object sender, RoutedEventArgs e)
+        private void DoChange(object sender, RoutedEventArgs e)
         {
-            
-            _viewModel.TextAnalyzer(BoxAnalyzer.Text);
+            Position = int.Parse(TextBoxPosition.Text);
+            this.Close();
+        }
 
-
+        private void StopChange(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

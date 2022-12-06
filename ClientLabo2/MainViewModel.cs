@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 using ClientLabo2.View;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Windows.Markup;
+using System.Windows.Media;
 using ClientLabo2.Classe;
+using Label = System.Windows.Controls.Label;
 
 namespace ClientLabo2
 {
@@ -20,7 +23,6 @@ namespace ClientLabo2
         public int TypeRunningApp { get; set; }
         public ConnectedView Connected { get; set; }
         public ConnectionView ConnectionView { get; set; }
-        public AnalyzerTextView AnalyzerTextView { get; set; }
         private object _currentView;
         public IPHostEntry ipHost { get; set; }
         public IPAddress ipAddr { get; set; }
@@ -29,6 +31,7 @@ namespace ClientLabo2
         public Thread threadCaptor { get; set; }
         public ObservableCollection<Captor> Captor { get; set; }
         public ObservableCollection<Actuator> Actuator { get; set; }
+        public MessageToServer MsgToSend { get; set; }
 
 
 
@@ -46,7 +49,6 @@ namespace ClientLabo2
         {
             Connected = new ConnectedView(this);
             ConnectionView = new ConnectionView(this);
-            AnalyzerTextView = new AnalyzerTextView(this);
             CurrentView = ConnectionView;
             Actuator = new ObservableCollection<Actuator>();
             Actuator.Add(new Actuator("Convoyeur 1",1));
@@ -66,6 +68,7 @@ namespace ClientLabo2
             Captor.Add(new Captor("L2", 0)); 
             Captor.Add(new Captor("AP", 0));
             TypeRunningApp = 0;
+            MsgToSend = new MessageToServer();
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -97,56 +100,171 @@ namespace ClientLabo2
             threadCaptor.Start();
         }
 
-        public void SendMessage(int captor,int time)
+        public void SendMessage(int action,int captor,int time,int position)
         {
-            if (captor != 0)
-            {
-                string msg = captor.ToString() + "-" + time.ToString();
-                byte[] messageSent = Encoding.ASCII.GetBytes(msg);
-                sender.Send(messageSent);
-            }
+            string msg =  action.ToString() + "-"+ captor.ToString() + "-" + time.ToString() + "-" + position.ToString();
+            Debug.WriteLine("Test sendMsg : " + msg);
+            byte[] messageSent = Encoding.ASCII.GetBytes(msg);
+            sender.Send(messageSent);
         }
 
-        public void TextAnalyzer(string text)
+        /// <summary>
+        /// msg type : 1-5-8-0
+        /// if there is a 0 in the line, the parameter is not use : ex : 4-8-0 -> no actuator, 2-0-5 -> no time
+        /// First symbol : 1 activer (avec temps), 2 activer sans temps, 3 désactiver,4 attendre avec temps
+        /// Second symbol : Time (if 0 no time)
+        /// Third symbol : Number actuator
+        /// </summary>
+        public void CompileSyntaxe(string syntaxetmp)
         {
-            ///Text de base
-            /// Commande : Activer,Désactiver,Activer pendant X secondes
-            /// Commande + Actuateur
-            int i = 0;
-            string[] textSplit = text.Split(' ');
-            string toSend = "";
+            Connected.SyntaxeNotif.Text = "";
+            MsgToSend.ToZero();
+            int cpt = 0;
+            string[] textSplit = syntaxetmp.Split(';');
 
-
-            switch (textSplit[0])
-            { 
-                case "activer":
-                { 
-                    // Activer capteur
-                    toSend = "1-";
-                    i++;
-                    if (textSplit[i] == "pendant")
-                    {
-                        i++;
-
-                        toSend = toSend + textSplit[i]+'-';
-                    }
-
-                    int nb = DetectActuator(textSplit[i]);
-                    toSend = toSend + nb.ToString();
-
-                    Debug.WriteLine(toSend);
-
-
-                } break;
-
-                case "desactiver": 
+            //ajouter foreach
+            foreach (var syntaxe in textSplit)
+            {
+                if (syntaxe != "")
                 {
-
-                } break;
-
-
+                    cpt++;
+                    Debug.WriteLine(syntaxe);
+                    FirstAnalyzer(syntaxe);
+                    if (MsgToSend.Action != -1)
+                    {
+                        Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Green);
+                        Connected.SyntaxeNotif.Text += "The " + cpt + " message ok   ";
+                        SendMessage(MsgToSend.Action, MsgToSend.Actuator, MsgToSend.Time, MsgToSend.Position);
+                        Debug.WriteLine("Client <: Msg sent via syntaxeCompiler to server with : " + MsgToSend.ToString());
+                    }
+                    MsgToSend.ToZero();
                 }
             }
+        }
+        public void FirstAnalyzer(string synt)
+        {
+            string[] syntaxe = synt.Split(' ');
+            switch (syntaxe[0])
+            {
+                case "activer":
+                {
+                    if (syntaxe[1] == "pendant")
+                    {
+                        // activer avec temps
+                        MsgToSend.Action = 1;
+                        TimeAnalyzer(syntaxe,2);
+                    }
+                    else
+                    {
+                        //activer sans temps
+                        MsgToSend.Action = 2;
+                        if (syntaxe.Length == 3)
+                        {
+                            CaptorAnalyzer(syntaxe[1],syntaxe[3]);
+                        }
+                        else
+                            CaptorAnalyzer(syntaxe[1],"");
+                    }
+                }
+                    break;
+                case "desactiver":
+                {
+                    MsgToSend.Action = 3;
+                    CaptorAnalyzer(syntaxe[1],"");
+                }
+                    break;
+                case "attendre":
+                {
+                    Debug.WriteLine("On passe attendre");
+                    MsgToSend.Action = 4;
+                    TimeAnalyzer(syntaxe, 1);
+                    
+                }
+                    break;
+                default:
+                {
+                        // error
+                        Debug.WriteLine("Client <: Error first word");
+                        Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
+                        Connected.SyntaxeNotif.Text = "Erreur in first word" + syntaxe[0];
+                        MsgToSend.Action = -1;
+                    }
+                    break;
+            }
+
+        }
+
+        public void TimeAnalyzer(string[] synt,int type)
+        {
+            Debug.WriteLine("time analyzer");
+            if (int.TryParse(synt[type], out _))
+            {
+                MsgToSend.Time = int.Parse(synt[type]);
+                if (type == 2)
+                {
+                    CaptorAnalyzer(synt[4],"");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Client <: Error number");
+                Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
+                Connected.SyntaxeNotif.Text = "Erreur in number" + synt[2];
+                MsgToSend.Action = -1;
+            }
+            
+        }
+
+        public void CaptorAnalyzer(string syntaxe,string position)
+        {
+            switch (syntaxe)
+            {
+                case "convoyeur1":
+                {
+                    MsgToSend.Actuator = 1;
+                }
+                    break;
+                case "convoyeur2":
+                {
+                    MsgToSend.Actuator = 2;
+                }
+                    break;
+                case "ventouse":
+                {
+                    MsgToSend.Actuator = 3;
+                }
+                    break;
+                case "plongeur":
+                {
+                    MsgToSend.Actuator = 4;
+                }
+                    break;
+                case "arbre":
+                {
+                    MsgToSend.Actuator = 5;
+                }
+                    break;
+                case "grappin":
+                {
+                    MsgToSend.Actuator = 6;
+                }
+                    break;
+                case "chariot":
+                {
+                    MsgToSend.Actuator = 7;
+                    MsgToSend.Position = int.Parse(position);
+                }
+                    break;
+                default:
+                {
+                    Debug.WriteLine("Client <: Error actuator");
+                        Connected.SyntaxeNotif.Foreground = new SolidColorBrush(Colors.Red);
+                    Connected.SyntaxeNotif.Text = "Erreur in actuator name" + syntaxe;
+                    MsgToSend.Action = -1;
+                } break;
+
+            }
+        }
 
         public int DetectActuator(string actuator)
         {
@@ -204,7 +322,7 @@ namespace ClientLabo2
                 sender.Receive(messageReceived);
                 int i = 0;
                 string strlist = Encoding.ASCII.GetString(messageReceived);
-                Debug.WriteLine("Client <: Reception message :"+ strlist);
+                //Debug.WriteLine("Client <: Reception message :"+ strlist);
                 foreach (Captor c in Captor)
                 {
                     c.State = strlist[i] - 48;

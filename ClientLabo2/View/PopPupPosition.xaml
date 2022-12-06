@@ -1,0 +1,58 @@
+﻿<Window
+    x:Class="ClientLabo2.View.PopPupPosition"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ClientLabo2.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="PopPupPosition"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Grid Background="#1A1F2D">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.7*" />
+            <RowDefinition Height="1.2*" />
+        </Grid.RowDefinitions>
+        <Label
+            Grid.Row="0"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            Content="Enter chariot position 0 -&gt; 3"
+            FontSize="25"
+            Foreground="White" />
+        <ui:TextBox
+            x:Name="TextBoxPosition"
+            Grid.Row="1"
+            Margin="75,50"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#202952"
+            BorderThickness="0"
+            FontSize="20"
+            Foreground="Black"
+            Text="" />
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <ui:Button
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="DoChange"
+                Content="   OK   " />
+            <ui:Button
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="StopChange"
+                Content="   Cancel   " />
+        </Grid>
+
+
+    </Grid>
+</Window>

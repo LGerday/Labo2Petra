@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:ClientLabo2"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="1200"
+    Height="800"
     Background="WhiteSmoke"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">

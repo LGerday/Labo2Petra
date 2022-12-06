@@ -88,3 +88,5 @@ C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLab
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\ClientLabo2.csproj.AssemblyReference.cache
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\AnalyzerTextView.g.cs
 C:\Users\lelep\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\AnalyzerTextView.baml
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopPupPosition.g.cs
+C:\Users\lele2\Desktop\Labo2Petra\ClientLabo2\obj\Debug\net6.0-windows\View\PopPupPosition.baml
